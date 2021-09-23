@@ -25,3 +25,5 @@ yarn build
 
 - 通用样式类方便落实样式规范，提高开发效率。
 - CSS in JS 方案编写样式很灵活，特别是在需要根据 prop 条件渲染样式的时候。适合作为通用样式类的补充。
+
+推荐安装 vscode 插件 [vscode-styled-components](https://marketplace.visualstudio.com/items?itemName=jpoissonnier.vscode-styled-components)
