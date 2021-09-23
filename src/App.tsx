@@ -4,12 +4,6 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { appRouter } from "./router";
 import Page404 from "./pages/404";
 
-const P = styled.p`
-  font-size: 1.5em;
-  text-align: center;
-  color: palevioletred;
-`;
-
 function App() {
   return (
     <Router>
@@ -20,14 +14,14 @@ function App() {
             exact={routerItem.exact}
             path={routerItem.path}
           >
+            {/* 暂时不考虑加载中效果 */}
             <Suspense fallback={false}>
               <routerItem.component></routerItem.component>
             </Suspense>
           </Route>
         ))}
-        <Route>
-          <Page404></Page404>
-        </Route>
+        {/* fallback 404 page */}
+        <Route component={Page404}></Route>
       </Switch>
     </Router>
   );
