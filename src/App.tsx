@@ -2,8 +2,6 @@ import { useState } from 'react'
 import logo from './logo.svg'
 import styled from 'styled-components';
 
-import '@/styles/base.scss'
-
 import './App.css'
 
 const P = styled.p`
@@ -12,12 +10,18 @@ text-align: center;
 color: palevioletred;
 `
 
+const Header = styled.header`
+background-color: #282c34;
+min-height: 100vh;
+color: white;
+`
+
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <div className="App">
-      <header className="App-header">
+      <Header className="flex-col align-center justify-center">
         <img src={logo} className="App-logo" alt="logo" />
         <P className="underline">Hello Vite + React!</P>
         <p>
@@ -47,7 +51,7 @@ function App() {
             Vite Docs
           </a>
         </p>
-      </header>
+      </Header>
     </div>
   )
 }
