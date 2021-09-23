@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import styled from "styled-components";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { appRouter } from "./router";
 import Page404 from "./pages/404";
