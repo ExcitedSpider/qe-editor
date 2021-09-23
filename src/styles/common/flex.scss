@@ -1,0 +1,56 @@
+@use './mixin.scss' as *;
+
+$flex-align: (
+  'start': flex-start,
+  'end': flex-end,
+  'between': space-between,
+  'around': space-around,
+  'center': center,
+  'stretch': stretch,
+  'baseline': baseline,
+);
+
+
+// 循环出所有 flex 布局
+@each $name, $val in $flex-align {
+  // justify-start, justify-end, justify-center, justify-around, justify-between
+  @include justify($name, $val);
+  @include align($name, $val);
+}
+
+/** 垂直水平居中布局 */
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/** 子元素均分容器尺寸 */
+.flex-mean {
+  display: flex;
+  & > * {
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 0;
+  }
+}
+/** 子元素自动填充 */
+.flex-grow {
+  display: flex;
+  & > * {
+    flex-grow: 1;
+  }
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}

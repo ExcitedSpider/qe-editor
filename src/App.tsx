@@ -2,6 +2,8 @@ import { useState } from 'react'
 import logo from './logo.svg'
 import styled from 'styled-components';
 
+import '@/styles/base.scss'
+
 import './App.css'
 
 const P = styled.p`

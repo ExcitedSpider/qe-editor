@@ -1,0 +1,46 @@
+@mixin dash-line($direction, $dash: 4, $gap: 4) {
+  background-image: linear-gradient(
+    $direction,
+    var(--divider-color, rgba(0, 0, 0, 0.12)) 0,
+    var(--divider-color, rgba(0, 0, 0, 0.12)) #{$dash}px,
+    transparent #{$dash}px,
+    transparent #{$dash + $gap}px
+  );
+
+  background-size: #{$dash + $gap}px #{$dash + $gap}px;
+  background-repeat: repeat;
+}
+
+@mixin justify($name, $value) {
+  .justify-#{$name} {
+    display: flex;
+    justify-content: $value;
+  }
+}
+
+@mixin align($name, $value) {
+  .align-#{$name} {
+    display: flex;
+    align-items: $value;
+  }
+}
+
+@mixin divide-rows($repeat) {
+  grid-template-rows: repeat(#{$repeat}, 1fr);
+}
+@mixin divide-cols($repeat) {
+  grid-template-columns: repeat(#{$repeat}, 1fr);
+}
+
+@mixin text-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@mixin line-clamp($line: 2) {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: $line;
+  -webkit-box-orient: vertical;
+}
