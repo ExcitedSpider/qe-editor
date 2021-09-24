@@ -4,9 +4,17 @@ import React, {
   useImperativeHandle,
   forwardRef,
 } from "react";
-import { BaseEditor, createEditor, Descendant, Editor } from "slate";
-import { Slate, Editable, withReact, ReactEditor } from "slate-react";
+import { createEditor, Descendant, Transforms, Text } from "slate";
+import {
+  Slate,
+  Editable,
+  withReact,
+  RenderElementProps,
+  RenderLeafProps,
+} from "slate-react";
 import styled from "styled-components";
+import { MpEditorProps, EditorInstance } from "./type";
+import { Toolbar, MarkButton } from "../toolbar";
 
 const WrapNode = styled.div`
   height: 100%;
@@ -16,12 +24,7 @@ const WrapNode = styled.div`
   padding: 16px;
 `;
 
-export interface MpEditorProps {
-  className?: string;
-  style?: React.CSSProperties;
-}
-
-export const MpEditor = forwardRef<ReactEditor & Editor, MpEditorProps>(
+export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
   (props, ref) => {
     const { className, style } = props;
 
@@ -43,17 +46,62 @@ export const MpEditor = forwardRef<ReactEditor & Editor, MpEditorProps>(
           value={value}
           onChange={(newValue) => setValue(newValue)}
         >
-          <Editable className={`h-full ${className}`} style={style}></Editable>
+          <Toolbar>
+            <MarkButton format="bold">B</MarkButton>
+          </Toolbar>
+          <Editable
+            renderElement={renderElement}
+            renderLeaf={renderLeaf}
+            className={`h-full ${className}`}
+            onKeyDown={handleKeyDown.bind(editor, editor)}
+            style={style}
+          ></Editable>
         </Slate>
       </WrapNode>
     );
   }
 );
 
+function handleKeyDown(editor: EditorInstance, event: React.KeyboardEvent) {
+  if (!event.ctrlKey) {
+    return;
+  }
+
+  const metaKeyHandlers: { [key: string]: () => void } = {
+    b: () => {
+      event.preventDefault();
+      Transforms.setNodes(
+        editor,
+        { bold: true },
+        { match: (n) => Text.isText(n), split: true }
+      );
+    },
+  };
+
+  metaKeyHandlers[event.key]?.();
+}
+
+function renderLeaf(props: RenderLeafProps) {
+  const LeafSpan = styled.span`
+    font-weight: ${props.leaf.bold ? "bold" : "normal"};
+  `;
+
+  return <LeafSpan {...props.attributes}>{props.children}</LeafSpan>;
+}
+
+function renderElement(props: RenderElementProps) {
+  return (
+    // 所有元素统一使用 section 保证兼容性
+    <section data-powered-by="tad-mp-editor" {...props.attributes}>
+      {props.children}
+    </section>
+  );
+}
+
 // 构造 editor ref 对象
 function useRefObject(
-  ref: React.ForwardedRef<ReactEditor & BaseEditor>,
-  editor: ReactEditor & BaseEditor
+  ref: React.ForwardedRef<EditorInstance>,
+  editor: EditorInstance
 ) {
   useImperativeHandle(
     ref,
