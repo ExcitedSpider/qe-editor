@@ -1,14 +1,25 @@
-import * as React from 'react';
-import styled from 'styled-components';
+import styled from "styled-components";
+import { MpEditor } from "@/components/mp-editor";
 
-const P = styled.p`
-  font-size: 1.5em;
-  text-align: center;
-  color: palevioletred;
+const BackgroundNode = styled.div`
+  padding: 60px;
+  min-height: 100vh;
+  box-sizing: border-box;
+`;
+
+const EditorNode = styled.div`
+  width: 768px;
+  margin: 0 auto;
 `;
 
 const Home = () => {
-  return <P>Hello Home</P>
-}
+  return (
+    <BackgroundNode>
+      <EditorNode>
+        <MpEditor style={{ minHeight: "600px" }}></MpEditor>
+      </EditorNode>
+    </BackgroundNode>
+  );
+};
 
 export default Home;
