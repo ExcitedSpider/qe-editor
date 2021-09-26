@@ -12,7 +12,7 @@ import {
   RenderElementProps,
   RenderLeafProps,
 } from "slate-react";
-import styled from "styled-components";
+import styled, { CSSProperties } from "styled-components";
 import { MpEditorProps, EditorInstance } from "./type";
 import { Toolbar, MarkButton } from "../toolbar";
 
@@ -82,11 +82,15 @@ function handleKeyDown(editor: EditorInstance, event: React.KeyboardEvent) {
 }
 
 function renderLeaf(props: RenderLeafProps) {
-  const LeafSpan = styled.span`
-    font-weight: ${props.leaf.bold ? "bold" : "normal"};
-  `;
+  const style: CSSProperties = {
+    fontWeight: props.leaf.bold ? "bold" : "normal",
+  };
 
-  return <LeafSpan {...props.attributes}>{props.children}</LeafSpan>;
+  return (
+    <span style={style} {...props.attributes}>
+      {props.children}
+    </span>
+  );
 }
 
 function renderElement(props: RenderElementProps) {

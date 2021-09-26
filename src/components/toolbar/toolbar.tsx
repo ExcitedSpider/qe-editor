@@ -19,15 +19,13 @@ export const Toolbar: React.FC<React.PropsWithChildren<ToolbarProps>> = ({
     </ToolbarNode>
   );
 };
-
 const ButtonNode = styled.div`
-  display: inline-block;
   height: 32px;
   width: 32px;
   overflow: hidden;
   cursor: pointer;
   border-radius: 4px;
-  
+
   &:hover {
     background-color: rgba(0, 0, 0, 0.12);
   }
@@ -36,8 +34,16 @@ const ButtonNode = styled.div`
   }
 `;
 
-export const MarkButton: React.FC<{ format: NodeFormat }> = ({ format, children }) => {
+export const MarkButton: React.FC<{ format: NodeFormat }> = ({
+  format,
+  children,
+}) => {
   const editor = useSlate();
+
+  const active = React.useMemo(
+    () => isMarkActive(editor, format),
+    [format, editor]
+  );
 
   return (
     <ButtonNode
@@ -45,6 +51,7 @@ export const MarkButton: React.FC<{ format: NodeFormat }> = ({ format, children 
         event.preventDefault();
         toggleMark(editor, format);
       }}
+      className="inline-flex justify-center align-center"
       role="button"
       aria-label={`toggle format ${format}`}
     >
