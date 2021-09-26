@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { appRouter } from "./router";
 import Page404 from "./pages/404";
 
+import 'adui/es/style/base.css';
+
 function App() {
   return (
     <Router>

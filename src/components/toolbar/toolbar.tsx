@@ -3,9 +3,11 @@ import styled from "styled-components";
 import { useSlate, ReactEditor } from "slate-react";
 import { Editor, BaseEditor, CustomTypes } from "slate";
 import { ToolbarProps } from "./type";
+import Tag from "adui/es/tag";
 
 const ToolbarNode = styled.div`
   background-color: white;
+  padding-bottom: 16px;
 `;
 
 export const Toolbar: React.FC<React.PropsWithChildren<ToolbarProps>> = ({
@@ -19,20 +21,6 @@ export const Toolbar: React.FC<React.PropsWithChildren<ToolbarProps>> = ({
     </ToolbarNode>
   );
 };
-const ButtonNode = styled.div`
-  height: 32px;
-  width: 32px;
-  overflow: hidden;
-  cursor: pointer;
-  border-radius: 4px;
-
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.12);
-  }
-  &:active {
-    background-color: rgba(0, 0, 0, 0.2);
-  }
-`;
 
 export const MarkButton: React.FC<{ format: NodeFormat }> = ({
   format,
@@ -40,23 +28,19 @@ export const MarkButton: React.FC<{ format: NodeFormat }> = ({
 }) => {
   const editor = useSlate();
 
-  const active = React.useMemo(
-    () => isMarkActive(editor, format),
-    [format, editor]
-  );
+  const active = isMarkActive(editor, format);
 
   return (
-    <ButtonNode
-      onMouseDown={(event) => {
-        event.preventDefault();
+    <Tag
+      interactive
+      style={{ minWidth: "20px", minHeight: "20px", lineHeight: "20px" }}
+      intent={active ? "primary" : "normal"}
+      onClick={() => {
         toggleMark(editor, format);
       }}
-      className="inline-flex justify-center align-center"
-      role="button"
-      aria-label={`toggle format ${format}`}
     >
       {children}
-    </ButtonNode>
+    </Tag>
   );
 };
 

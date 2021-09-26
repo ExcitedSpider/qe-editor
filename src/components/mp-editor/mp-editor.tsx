@@ -5,16 +5,11 @@ import React, {
   forwardRef,
 } from "react";
 import { createEditor, Descendant, Transforms, Text } from "slate";
-import {
-  Slate,
-  Editable,
-  withReact,
-  RenderElementProps,
-  RenderLeafProps,
-} from "slate-react";
-import styled, { CSSProperties } from "styled-components";
+import { Slate, Editable, withReact, RenderElementProps } from "slate-react";
+import styled from "styled-components";
 import { MpEditorProps, EditorInstance } from "./type";
 import { Toolbar, MarkButton } from "../toolbar";
+import { renderLeaf } from "./leaf";
 
 const WrapNode = styled.div`
   height: 100%;
@@ -79,18 +74,6 @@ function handleKeyDown(editor: EditorInstance, event: React.KeyboardEvent) {
   };
 
   metaKeyHandlers[event.key]?.();
-}
-
-function renderLeaf(props: RenderLeafProps) {
-  const style: CSSProperties = {
-    fontWeight: props.leaf.bold ? "bold" : "normal",
-  };
-
-  return (
-    <span style={style} {...props.attributes}>
-      {props.children}
-    </span>
-  );
 }
 
 function renderElement(props: RenderElementProps) {
