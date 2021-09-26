@@ -5,7 +5,11 @@ import { ReactEditor } from "slate-react";
 type CustomElement = { type: "paragraph"; children: CustomText[] };
 
 // 格式数据类型定义
-type CustomText = { text: string; bold?: boolean };
+interface CustomText {
+  text: string;
+  bold?: boolean;
+  fontSize?: string;
+}
 
 declare module "slate" {
   interface CustomTypes {

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { MpEditor } from "@/components/mp-editor";
 
+
 const BackgroundNode = styled.div`
   padding: 60px;
   min-height: 100vh;

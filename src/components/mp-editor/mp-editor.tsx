@@ -8,7 +8,7 @@ import { createEditor, Descendant, Transforms, Text } from "slate";
 import { Slate, Editable, withReact, RenderElementProps } from "slate-react";
 import styled from "styled-components";
 import { MpEditorProps, EditorInstance } from "./type";
-import { Toolbar, MarkButton } from "../toolbar";
+import { Toolbar, MarkButton, MarkSelect } from "../toolbar";
 import { renderLeaf } from "./leaf";
 
 const WrapNode = styled.div`
@@ -28,7 +28,7 @@ export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
     const [value, setValue] = useState<Descendant[]>([
       {
         type: "paragraph",
-        children: [{ text: "" }],
+        children: [{ text: "", fontSize: '17px' }],
       },
     ]);
 
@@ -43,6 +43,11 @@ export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
         >
           <Toolbar>
             <MarkButton format="bold">B</MarkButton>
+            <MarkSelect
+              format="fontSize"
+              options={getFontSizeOptions()}
+              defaultValue="17px"
+            ></MarkSelect>
           </Toolbar>
           <Editable
             renderElement={renderElement}
@@ -56,6 +61,16 @@ export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
     );
   }
 );
+
+function getFontSizeOptions(): {
+  label: React.ReactNode;
+  value: React.ReactText;
+}[] {
+  return new Array(20).fill(0b0).map((_, index) => ({
+    label: `${12 + index}px`,
+    value: `${12 + index}px`,
+  }));
+}
 
 function handleKeyDown(editor: EditorInstance, event: React.KeyboardEvent) {
   if (!event.ctrlKey) {
