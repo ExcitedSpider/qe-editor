@@ -23,13 +23,14 @@ export const Toolbar: React.FC<React.PropsWithChildren<ToolbarProps>> = ({
 };
 
 /** 格式按钮，比如加粗、下划线等 */
-export const MarkButton: React.FC<{ format: NodeFormat }> = ({
+export const MarkButton: React.FC<{ format: NodeFormat, value?: any }> = ({
   format,
   children,
+  value
 }) => {
   const editor = useSlate();
 
-  const active = isMarkActive(editor, format);
+  const active = isMarkActive(editor, format, value);
 
   return (
     <Tag
@@ -37,7 +38,7 @@ export const MarkButton: React.FC<{ format: NodeFormat }> = ({
       style={{ minWidth: "20px", minHeight: "20px", lineHeight: "20px" }}
       intent={active ? "primary" : "normal"}
       onClick={() => {
-        toggleMark(editor, format);
+        toggleMark(editor, format, value);
       }}
     >
       {children}
@@ -90,9 +91,10 @@ export const MarkSelect: React.FC<{
 
 type NodeFormat = keyof Omit<CustomTypes["Text"], "text">;
 
-const isMarkActive = (editor: BaseEditor & ReactEditor, format: NodeFormat) => {
+const isMarkActive = (editor: BaseEditor & ReactEditor, format: NodeFormat, value = true) => {
   const marks = Editor.marks(editor);
-  return marks ? marks[format] === true : false;
+
+  return marks?.[format] === value;
 };
 
 const toggleMark = (
@@ -100,7 +102,7 @@ const toggleMark = (
   format: NodeFormat,
   value: any = true
 ) => {
-  const isActive = isMarkActive(editor, format);
+  const isActive = isMarkActive(editor, format, value);
 
   if (isActive) {
     Editor.removeMark(editor, format);

@@ -10,6 +10,7 @@ import styled from "styled-components";
 import { MpEditorProps, EditorInstance } from "./type";
 import { Toolbar, MarkButton, MarkSelect } from "../toolbar";
 import { renderLeaf } from "./leaf";
+import { SketchPicker } from 'react-color';
 
 const WrapNode = styled.div`
   height: 100%;
@@ -18,6 +19,18 @@ const WrapNode = styled.div`
   background-color: white;
   padding: 16px;
 `;
+
+const Italic = styled.span`
+font-style: italic;
+`
+
+const UnderLine = styled.span`
+text-decoration: underline;
+`
+
+const LineThrough = styled.span`
+text-decoration: line-through;
+`
 
 export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
   (props, ref) => {
@@ -28,7 +41,7 @@ export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
     const [value, setValue] = useState<Descendant[]>([
       {
         type: "paragraph",
-        children: [{ text: "", fontSize: '17px' }],
+        children: [{ text: "", fontSize: "17px" }],
       },
     ]);
 
@@ -42,12 +55,21 @@ export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
           onChange={(newValue) => setValue(newValue)}
         >
           <Toolbar>
-            <MarkButton format="bold">B</MarkButton>
             <MarkSelect
               format="fontSize"
               options={getFontSizeOptions()}
               defaultValue="17px"
             ></MarkSelect>
+            <MarkButton format="bold">B</MarkButton>
+            <MarkButton format="fontStyle" value="italic">
+              <Italic>I</Italic>
+            </MarkButton>
+            <MarkButton format="textDecoration" value="underline">
+              <UnderLine>U</UnderLine>
+            </MarkButton>
+            <MarkButton format="textDecoration" value="line-through">
+              <LineThrough>S</LineThrough>
+            </MarkButton>
           </Toolbar>
           <Editable
             renderElement={renderElement}

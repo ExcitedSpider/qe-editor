@@ -11,8 +11,10 @@ export function renderLeaf(props: RenderLeafProps) {
 }
 
 function getLeafProps(props: RenderLeafProps): CSSProperties {
+  const { bold, ...restCSSProps } = props.leaf;
+
   return {
     fontWeight: props.leaf.bold ? "bold" : "normal",
-    fontSize: props.leaf.fontSize || undefined,
+    ...restCSSProps,
   };
 }
