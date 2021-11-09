@@ -7,6 +7,9 @@ import {
   CustomTypes,
   Transforms,
   Element as SlateElement,
+  Node,
+  Element,
+  Selection,
 } from "slate";
 import { ToolbarProps } from "./type";
 import { ISelectProps, Select as AduiSelect, Tooltip } from "adui";
@@ -119,6 +122,9 @@ export const MarkSelect: React.FC<{
   );
 };
 
+const retriveCondition = (n: Node) =>
+  SlateElement.isElement(n) && !Editor.isEditor(n) && !!n.type;
+
 /** Block 格式选择，比如对齐等 */
 export const BlockSelect: React.FC<{
   format: keyof React.CSSProperties;
@@ -128,14 +134,16 @@ export const BlockSelect: React.FC<{
 }> = ({ format, options, defaultValue, tips }) => {
   const editor = useSlate();
 
-  // TODO 实现查询当前值
-  // const current = ...
+  const { selection } = editor;
+
+  let current = retrieveFormatValue(defaultValue, selection, editor, format);
 
   return (
     <BaseSelect
       tips={tips}
       options={options}
       defaultValue={defaultValue}
+      value={current}
       onSelect={(value) => {
         Transforms.setNodes(
           editor,
@@ -145,7 +153,7 @@ export const BlockSelect: React.FC<{
             },
           },
           {
-            match: (n) => Editor.isBlock(editor, n),
+            match: retriveCondition,
           }
         );
       }}
@@ -194,3 +202,21 @@ export const toggleMark = (
     Editor.addMark(editor, format, value);
   }
 };
+
+function retrieveFormatValue(defaultValue: React.ReactText | undefined, selection: Selection, editor: BaseEditor & ReactEditor, format: string) {
+  let current = defaultValue;
+  if (selection) {
+    const nodeRetriver = Editor.nodes(editor, {
+      at: selection,
+      match: retriveCondition,
+    });
+
+    const { value } = nodeRetriver.next();
+    if (value) {
+      const [node] = value as [Element, unknown];
+      current = (node?.style as any)?.[format] || defaultValue;
+    }
+  }
+  return current;
+}
+
