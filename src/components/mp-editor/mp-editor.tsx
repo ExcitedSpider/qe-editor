@@ -72,6 +72,7 @@ export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
             <ColorPicker></ColorPicker>
           </Toolbar>
           <Editable
+            autoFocus
             renderElement={renderElement}
             renderLeaf={renderLeaf}
             className={`h-full ${className}`}

@@ -1,10 +1,10 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useSlate, ReactEditor } from "slate-react";
-import { Editor, BaseEditor, CustomTypes } from "slate";
+import { Editor, BaseEditor, CustomTypes, Transforms } from "slate";
 import { ToolbarProps } from "./type";
 import { Select as AduiSelect } from "adui";
-import { ToolbarTag } from './tag';
+import { ToolbarTag } from "./tag";
 
 const ToolbarNode = styled.div`
   background-color: white;
@@ -24,10 +24,10 @@ export const Toolbar: React.FC<React.PropsWithChildren<ToolbarProps>> = ({
 };
 
 /** 格式按钮，比如加粗、下划线等 */
-export const MarkButton: React.FC<{ format: NodeFormat, value?: any }> = ({
+export const MarkButton: React.FC<{ format: NodeFormat; value?: any }> = ({
   format,
   children,
-  value
+  value,
 }) => {
   const editor = useSlate();
 
@@ -90,18 +90,37 @@ export const MarkSelect: React.FC<{
 
 type NodeFormat = keyof Omit<CustomTypes["Text"], "text">;
 
-const isMarkActive = (editor: BaseEditor & ReactEditor, format: NodeFormat, value = true) => {
+const isMarkActive = (
+  editor: BaseEditor & ReactEditor,
+  format: NodeFormat,
+  value = true
+) => {
   const marks = Editor.marks(editor);
 
   return marks?.[format] === value;
 };
 
-const toggleMark = (
+export const toggleMark = (
   editor: BaseEditor & ReactEditor,
   format: NodeFormat,
   value: any = true
 ) => {
   const isActive = isMarkActive(editor, format, value);
+
+  // 用户没有选择，默认插入样式到第一个元素
+  if (!editor.selection) {
+    Transforms.insertNodes(
+      editor,
+      {
+        text: "",
+      },
+      {
+        at: [0, 0],
+      }
+    );
+
+    Transforms.select(editor,[0, 0]);
+  }
 
   if (isActive) {
     Editor.removeMark(editor, format);

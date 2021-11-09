@@ -5,6 +5,7 @@ import { useSlate } from "slate-react";
 import { Editor } from "slate";
 import { ToolbarTag } from "./tag";
 import { useClickOutside } from "../../hooks/use-click-outside";
+import { toggleMark } from './toolbar';
 import reactcss from "reactcss";
 
 const Colored = styled.span`
@@ -59,7 +60,6 @@ export const ColorPicker = () => {
 
   const currentValue = Editor.marks(editor)?.["color"] || "black";
   const ref = useClickOutside(() => {
-    console.log('click outside!')
     setVisible(false);
   });
 
@@ -72,18 +72,9 @@ export const ColorPicker = () => {
           </Colored>
           <FloatLayer visible={visible}>
             <BlockPicker
-              styles={reactcss({
-                default: {
-                  body: {
-                    body: {
-                      backgroundColor: "black",
-                    },
-                  },
-                },
-              })}
               color={currentValue}
               onChange={(e) => {
-                Editor.addMark(editor, "color", e.hex);
+                toggleMark(editor, 'color', e.hex);
               }}
               colors={PALLETES}
             ></BlockPicker>
