@@ -71,6 +71,12 @@ export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
               <LineThrough>S</LineThrough>
             </MarkButton>
             <ColorPicker tips="文字颜色"></ColorPicker>
+            <MarkSelect
+              format="lineHeight"
+              options={getLineHeightOptions()}
+              defaultValue={1.2}
+              tips="行高"
+            ></MarkSelect>
           </Toolbar>
           <Editable
             autoFocus
@@ -93,6 +99,16 @@ function getFontSizeOptions(): {
   return new Array(20).fill(0b0).map((_, index) => ({
     label: `${12 + index}px`,
     value: `${12 + index}px`,
+  }));
+}
+
+function getLineHeightOptions(): {
+  label: React.ReactNode;
+  value: React.ReactText;
+}[] {
+  return new Array(7).fill(0b0).map((_, index)=> (0.8 + index * 0.2).toFixed(1)).map(value => ({
+    label: `${value}倍`,
+    value: Number(value), 
   }));
 }
 
