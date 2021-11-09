@@ -6,7 +6,6 @@ import { Editor } from "slate";
 import { ToolbarTag } from "./tag";
 import { useClickOutside } from "../../hooks/use-click-outside";
 import { toggleMark } from './toolbar';
-import reactcss from "reactcss";
 
 const Colored = styled.span`
   color: ${(props) => props.color || "black"};
