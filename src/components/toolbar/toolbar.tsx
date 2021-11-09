@@ -1,7 +1,13 @@
 import * as React from "react";
 import styled from "styled-components";
 import { useSlate, ReactEditor } from "slate-react";
-import { Editor, BaseEditor, CustomTypes, Transforms } from "slate";
+import {
+  Editor,
+  BaseEditor,
+  CustomTypes,
+  Transforms,
+  Element as SlateElement,
+} from "slate";
 import { ToolbarProps } from "./type";
 import { ISelectProps, Select as AduiSelect, Tooltip } from "adui";
 import { ToolbarTag } from "./tag";
@@ -25,7 +31,7 @@ export const Toolbar: React.FC<React.PropsWithChildren<ToolbarProps>> = ({
 
 /** 格式按钮，比如加粗、下划线等 */
 export const MarkButton: React.FC<{
-  format: NodeFormat;
+  format: TextFormat;
   value?: any;
   tips?: string;
 }> = ({ format, children, value, tips }) => {
@@ -57,51 +63,18 @@ const Select = styled(AduiSelect)`
   }
 `;
 
-const BaseSelect: React.FC<ISelectProps & {
-  options: { label: React.ReactNode; value: React.ReactText }[];
-}> = ( { options} ) => {
-  return (
-    <Select theme="light">
-      {options.map((item) => {
-        return (
-          <Select.Option
-            style={{ zIndex: 100000 }}
-            key={item.value}
-            value={item.value}
-          >
-            {item.label}
-          </Select.Option>
-        );
-      })}
-    </Select>
-  );
-};
-
-/** 格式选择，比如字号等 */
-export const MarkSelect: React.FC<{
-  format: NodeFormat;
-  options: { label: React.ReactNode; value: React.ReactText }[];
-  defaultValue?: React.ReactText;
-  tips?: string;
-}> = ({ format, options, defaultValue, tips }) => {
-  const editor = useSlate();
-
-  const current = Editor.marks(editor)?.[format];
-
+/** 基础选择器 */
+export const BaseSelect: React.FC<
+  ISelectProps & {
+    /** 选项 */
+    options: { label: React.ReactNode; value: React.ReactText }[];
+    /** tooltip  */
+    tips?: string;
+  }
+> = ({ options, tips, ...rest }) => {
   return (
     <Tooltip popup={tips} placement="top">
-      <Select
-        theme="light"
-        onSelect={(value: React.ReactText) => {
-          toggleMark(editor, format, value);
-        }}
-        value={
-          typeof current === "number" || typeof current === "string"
-            ? current
-            : null
-        }
-        defaultValue={defaultValue}
-      >
+      <Select theme="light" {...rest}>
         {options.map((item) => {
           return (
             <Select.Option
@@ -118,11 +91,74 @@ export const MarkSelect: React.FC<{
   );
 };
 
-type NodeFormat = keyof Omit<CustomTypes["Text"], "text">;
+/** Mark 格式选择，比如字号、颜色等 */
+export const MarkSelect: React.FC<{
+  format: TextFormat;
+  options: { label: React.ReactNode; value: React.ReactText }[];
+  defaultValue?: React.ReactText;
+  tips?: string;
+}> = ({ format, options, defaultValue, tips }) => {
+  const editor = useSlate();
+
+  const current = Editor.marks(editor)?.[format];
+
+  return (
+    <BaseSelect
+      tips={tips}
+      options={options}
+      onSelect={(value: React.ReactText) => {
+        toggleMark(editor, format, value);
+      }}
+      value={
+        typeof current === "number" || typeof current === "string"
+          ? current
+          : null
+      }
+      defaultValue={defaultValue}
+    ></BaseSelect>
+  );
+};
+
+/** Block 格式选择，比如对齐等 */
+export const BlockSelect: React.FC<{
+  format: keyof React.CSSProperties;
+  options: { label: React.ReactNode; value: React.ReactText }[];
+  defaultValue?: React.ReactText;
+  tips?: string;
+}> = ({ format, options, defaultValue, tips }) => {
+  const editor = useSlate();
+
+  // TODO 实现查询当前值
+  // const current = ...
+
+  return (
+    <BaseSelect
+      tips={tips}
+      options={options}
+      defaultValue={defaultValue}
+      onSelect={(value) => {
+        Transforms.setNodes(
+          editor,
+          {
+            style: {
+              [format]: value,
+            },
+          },
+          {
+            match: (n) => Editor.isBlock(editor, n),
+          }
+        );
+      }}
+    ></BaseSelect>
+  );
+};
+
+type TextFormat = keyof Omit<CustomTypes["Text"], "text">;
+type NodeFormat = keyof CustomTypes["Element"];
 
 const isMarkActive = (
   editor: BaseEditor & ReactEditor,
-  format: NodeFormat,
+  format: TextFormat,
   value = true
 ) => {
   const marks = Editor.marks(editor);
@@ -132,7 +168,7 @@ const isMarkActive = (
 
 export const toggleMark = (
   editor: BaseEditor & ReactEditor,
-  format: NodeFormat,
+  format: TextFormat,
   value: any = true
 ) => {
   const isActive = isMarkActive(editor, format, value);

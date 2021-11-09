@@ -8,7 +8,7 @@ import { createEditor, Descendant, Transforms, Text } from "slate";
 import { Slate, Editable, withReact, RenderElementProps } from "slate-react";
 import styled from "styled-components";
 import { MpEditorProps, EditorInstance } from "./type";
-import { Toolbar, MarkButton, MarkSelect, ColorPicker } from "../toolbar";
+import { Toolbar, MarkButton, MarkSelect, ColorPicker, BlockSelect } from "../toolbar";
 import { renderLeaf } from "./leaf";
 import { LeftAlign, centerAlign, rightAlign } from "./icon";
 
@@ -84,12 +84,12 @@ export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
               defaultValue={1.2}
               tips="行高"
             ></MarkSelect>
-            <MarkSelect
+            <BlockSelect
               format="textAlign"
               options={getTextAlignOptions()}
               defaultValue={"left"}
               tips="对齐"
-            ></MarkSelect>
+            ></BlockSelect>
           </Toolbar>
           <Editable
             autoFocus
@@ -190,7 +190,7 @@ function handleKeyDown(editor: EditorInstance, event: React.KeyboardEvent) {
 function renderElement(props: RenderElementProps) {
   return (
     // 所有元素统一使用 section 保证兼容性
-    <section data-powered-by="tad-mp-editor" {...props.attributes}>
+    <section data-powered-by="tad-mp-editor" style={props.element.style} {...props.attributes}>
       {props.children}
     </section>
   );
