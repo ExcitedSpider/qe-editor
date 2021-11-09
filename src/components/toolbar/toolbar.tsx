@@ -47,6 +47,7 @@ export const MarkButton: React.FC<{ format: NodeFormat, value?: any }> = ({
 
 const Select = styled(AduiSelect)`
   min-width: 52px;
+  margin-right: 12px;
 `;
 
 /** 格式选择，比如字号、对齐方式等 */

@@ -12,6 +12,7 @@ interface CustomText {
   textDecoration?: React.CSSProperties['textDecoration']
   fontStyle?: React.CSSProperties['fontStyle']
   color?: string;
+  lineHeight?: string | number;
 }
 
 declare module "slate" {
