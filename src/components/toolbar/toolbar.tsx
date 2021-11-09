@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useSlate, ReactEditor } from "slate-react";
 import { Editor, BaseEditor, CustomTypes, Transforms } from "slate";
 import { ToolbarProps } from "./type";
-import { Select as AduiSelect, Tooltip } from "adui";
+import { ISelectProps, Select as AduiSelect, Tooltip } from "adui";
 import { ToolbarTag } from "./tag";
 
 const ToolbarNode = styled.div`
@@ -50,9 +50,34 @@ export const MarkButton: React.FC<{
 const Select = styled(AduiSelect)`
   min-width: 52px;
   margin-right: 12px;
+
+  & .adui-select-selection-item {
+    display: flex;
+    align-items: center;
+  }
 `;
 
-/** 格式选择，比如字号、对齐方式等 */
+const BaseSelect: React.FC<ISelectProps & {
+  options: { label: React.ReactNode; value: React.ReactText }[];
+}> = ( { options} ) => {
+  return (
+    <Select theme="light">
+      {options.map((item) => {
+        return (
+          <Select.Option
+            style={{ zIndex: 100000 }}
+            key={item.value}
+            value={item.value}
+          >
+            {item.label}
+          </Select.Option>
+        );
+      })}
+    </Select>
+  );
+};
+
+/** 格式选择，比如字号等 */
 export const MarkSelect: React.FC<{
   format: NodeFormat;
   options: { label: React.ReactNode; value: React.ReactText }[];

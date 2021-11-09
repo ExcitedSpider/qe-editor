@@ -10,6 +10,7 @@ import styled from "styled-components";
 import { MpEditorProps, EditorInstance } from "./type";
 import { Toolbar, MarkButton, MarkSelect, ColorPicker } from "../toolbar";
 import { renderLeaf } from "./leaf";
+import { LeftAlign, centerAlign, rightAlign } from "./icon";
 
 const WrapNode = styled.div`
   height: 100%;
@@ -20,16 +21,16 @@ const WrapNode = styled.div`
 `;
 
 const Italic = styled.span`
-font-style: italic;
-`
+  font-style: italic;
+`;
 
 const UnderLine = styled.span`
-text-decoration: underline;
-`
+  text-decoration: underline;
+`;
 
 const LineThrough = styled.span`
-text-decoration: line-through;
-`
+  text-decoration: line-through;
+`;
 
 export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
   (props, ref) => {
@@ -60,14 +61,20 @@ export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
               defaultValue="17px"
               tips="字号"
             ></MarkSelect>
-            <MarkButton tips="粗体" format="bold">B</MarkButton>
+            <MarkButton tips="粗体" format="bold">
+              B
+            </MarkButton>
             <MarkButton tips="斜体" format="fontStyle" value="italic">
               <Italic>I</Italic>
             </MarkButton>
             <MarkButton tips="下划线" format="textDecoration" value="underline">
               <UnderLine>U</UnderLine>
             </MarkButton>
-            <MarkButton tips="删除线" format="textDecoration" value="line-through">
+            <MarkButton
+              tips="删除线"
+              format="textDecoration"
+              value="line-through"
+            >
               <LineThrough>S</LineThrough>
             </MarkButton>
             <ColorPicker tips="文字颜色"></ColorPicker>
@@ -76,6 +83,12 @@ export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
               options={getLineHeightOptions()}
               defaultValue={1.2}
               tips="行高"
+            ></MarkSelect>
+            <MarkSelect
+              format="textAlign"
+              options={getTextAlignOptions()}
+              defaultValue={"left"}
+              tips="对齐"
             ></MarkSelect>
           </Toolbar>
           <Editable
@@ -106,10 +119,53 @@ function getLineHeightOptions(): {
   label: React.ReactNode;
   value: React.ReactText;
 }[] {
-  return new Array(7).fill(0b0).map((_, index)=> (0.8 + index * 0.2).toFixed(1)).map(value => ({
-    label: `${value}倍`,
-    value: Number(value), 
-  }));
+  return new Array(7)
+    .fill(0b0)
+    .map((_, index) => (0.8 + index * 0.2).toFixed(1))
+    .map((value) => ({
+      label: `${value}倍`,
+      value: Number(value),
+    }));
+}
+
+const VerticalAlign = styled.div`
+  display: flex;
+  align-items: center;
+`
+
+function getTextAlignOptions() {
+  return [
+    {
+      label: (
+        <VerticalAlign>
+          <svg width="24" height="24" viewBox="0 0 1024 1024">
+            <path d={LeftAlign}></path>
+          </svg>
+        </VerticalAlign>
+      ),
+      value: "left",
+    },
+    {
+      label: (
+        <VerticalAlign>
+          <svg width="24" height="24" viewBox="0 0 1024 1024">
+            <path d={centerAlign}></path>
+          </svg>
+        </VerticalAlign>
+      ),
+      value: "center",
+    },
+    {
+      label: (
+        <VerticalAlign>
+          <svg width="24" height="24" viewBox="0 0 1024 1024">
+            <path d={rightAlign}></path>
+          </svg>
+        </VerticalAlign>
+      ),
+      value: "right",
+    },
+  ];
 }
 
 function handleKeyDown(editor: EditorInstance, event: React.KeyboardEvent) {

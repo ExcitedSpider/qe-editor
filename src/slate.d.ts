@@ -13,6 +13,7 @@ interface CustomText {
   fontStyle?: React.CSSProperties['fontStyle']
   color?: string;
   lineHeight?: string | number;
+  textAlign?: React.CSSProperties['textAlign'];
 }
 
 declare module "slate" {
