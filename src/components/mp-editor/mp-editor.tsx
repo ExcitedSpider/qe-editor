@@ -8,9 +8,8 @@ import { createEditor, Descendant, Transforms, Text } from "slate";
 import { Slate, Editable, withReact, RenderElementProps } from "slate-react";
 import styled from "styled-components";
 import { MpEditorProps, EditorInstance } from "./type";
-import { Toolbar, MarkButton, MarkSelect } from "../toolbar";
+import { Toolbar, MarkButton, MarkSelect, ColorPicker } from "../toolbar";
 import { renderLeaf } from "./leaf";
-import { SketchPicker } from 'react-color';
 
 const WrapNode = styled.div`
   height: 100%;
@@ -70,6 +69,7 @@ export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
             <MarkButton format="textDecoration" value="line-through">
               <LineThrough>S</LineThrough>
             </MarkButton>
+            <ColorPicker></ColorPicker>
           </Toolbar>
           <Editable
             renderElement={renderElement}

@@ -11,6 +11,7 @@ interface CustomText {
   fontSize?: string;
   textDecoration?: React.CSSProperties['textDecoration']
   fontStyle?: React.CSSProperties['fontStyle']
+  color?: string;
 }
 
 declare module "slate" {

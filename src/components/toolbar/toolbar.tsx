@@ -3,7 +3,8 @@ import styled from "styled-components";
 import { useSlate, ReactEditor } from "slate-react";
 import { Editor, BaseEditor, CustomTypes } from "slate";
 import { ToolbarProps } from "./type";
-import { Select as AduiSelect, Tag } from "adui";
+import { Select as AduiSelect } from "adui";
+import { ToolbarTag } from './tag';
 
 const ToolbarNode = styled.div`
   background-color: white;
@@ -33,16 +34,14 @@ export const MarkButton: React.FC<{ format: NodeFormat, value?: any }> = ({
   const active = isMarkActive(editor, format, value);
 
   return (
-    <Tag
-      interactive
-      style={{ minWidth: "20px", minHeight: "20px", lineHeight: "20px" }}
+    <ToolbarTag
       intent={active ? "primary" : "normal"}
       onClick={() => {
         toggleMark(editor, format, value);
       }}
     >
       {children}
-    </Tag>
+    </ToolbarTag>
   );
 };
 
@@ -63,7 +62,6 @@ export const MarkSelect: React.FC<{
   return (
     <Select
       theme="light"
-      size="mini"
       onSelect={(value: React.ReactText) => {
         toggleMark(editor, format, value);
       }}
