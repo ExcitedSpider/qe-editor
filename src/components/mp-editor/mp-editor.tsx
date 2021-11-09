@@ -59,17 +59,17 @@ export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
               options={getFontSizeOptions()}
               defaultValue="17px"
             ></MarkSelect>
-            <MarkButton format="bold">B</MarkButton>
-            <MarkButton format="fontStyle" value="italic">
+            <MarkButton tips="粗体" format="bold">B</MarkButton>
+            <MarkButton tips="斜体" format="fontStyle" value="italic">
               <Italic>I</Italic>
             </MarkButton>
-            <MarkButton format="textDecoration" value="underline">
+            <MarkButton tips="下划线" format="textDecoration" value="underline">
               <UnderLine>U</UnderLine>
             </MarkButton>
-            <MarkButton format="textDecoration" value="line-through">
+            <MarkButton tips="删除线" format="textDecoration" value="line-through">
               <LineThrough>S</LineThrough>
             </MarkButton>
-            <ColorPicker></ColorPicker>
+            <ColorPicker tips="文字颜色"></ColorPicker>
           </Toolbar>
           <Editable
             autoFocus

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useSlate, ReactEditor } from "slate-react";
 import { Editor, BaseEditor, CustomTypes, Transforms } from "slate";
 import { ToolbarProps } from "./type";
-import { Select as AduiSelect } from "adui";
+import { Select as AduiSelect, Tooltip } from "adui";
 import { ToolbarTag } from "./tag";
 
 const ToolbarNode = styled.div`
@@ -24,24 +24,27 @@ export const Toolbar: React.FC<React.PropsWithChildren<ToolbarProps>> = ({
 };
 
 /** 格式按钮，比如加粗、下划线等 */
-export const MarkButton: React.FC<{ format: NodeFormat; value?: any }> = ({
+export const MarkButton: React.FC<{ format: NodeFormat; value?: any; tips?: string }> = ({
   format,
   children,
   value,
+  tips
 }) => {
   const editor = useSlate();
 
   const active = isMarkActive(editor, format, value);
 
   return (
-    <ToolbarTag
-      intent={active ? "primary" : "normal"}
-      onClick={() => {
-        toggleMark(editor, format, value);
-      }}
-    >
-      {children}
-    </ToolbarTag>
+    <Tooltip popup={tips}>
+      <ToolbarTag
+        intent={active ? "primary" : "normal"}
+        onClick={() => {
+          toggleMark(editor, format, value);
+        }}
+      >
+        {children}
+      </ToolbarTag>
+    </Tooltip>
   );
 };
 

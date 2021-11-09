@@ -5,10 +5,24 @@ import { useSlate } from "slate-react";
 import { Editor } from "slate";
 import { ToolbarTag } from "./tag";
 import { useClickOutside } from "../../hooks/use-click-outside";
-import { toggleMark } from './toolbar';
+import { toggleMark } from "./toolbar";
+import { Tooltip } from "adui";
 
 const Colored = styled.span`
-  color: ${(props) => props.color || "black"};
+  &::after {
+    content: ' ';
+    display: block;
+
+    background-color: ${(props) => props.color || "black"};
+    height: 4px;
+    width: 16px;
+    border-radius: 2px;
+    
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 `;
 
 const Container = styled.div`
@@ -53,7 +67,7 @@ const PALLETES = [
   "#ffffff",
 ];
 
-export const ColorPicker = () => {
+export const ColorPicker: React.FC<{ tips: string }> = ({tips}) => {
   const [visible, setVisible] = React.useState(false);
   const editor = useSlate();
 
@@ -63,23 +77,27 @@ export const ColorPicker = () => {
   });
 
   return (
-    <div ref={ref as any} onClick={setVisible?.bind(null, true)} style={{ display: "inline-block" }}>
-      <ToolbarTag>
-        <Container>
-          <Colored color={currentValue}>
-            A
-          </Colored>
-          <FloatLayer visible={visible}>
-            <BlockPicker
-              color={currentValue}
-              onChange={(e) => {
-                toggleMark(editor, 'color', e.hex);
-              }}
-              colors={PALLETES}
-            ></BlockPicker>
-          </FloatLayer>
-        </Container>
-      </ToolbarTag>
-    </div>
+    <Tooltip popup={tips}>
+      <div
+        ref={ref as any}
+        onClick={setVisible?.bind(null, true)}
+        style={{ display: "inline-block" }}
+      >
+        <ToolbarTag>
+          <Container>
+            <Colored color={currentValue}>A</Colored>
+            <FloatLayer visible={visible}>
+              <BlockPicker
+                color={currentValue}
+                onChange={(e) => {
+                  toggleMark(editor, "color", e.hex);
+                }}
+                colors={PALLETES}
+              ></BlockPicker>
+            </FloatLayer>
+          </Container>
+        </ToolbarTag>
+      </div>
+    </Tooltip>
   );
 };
