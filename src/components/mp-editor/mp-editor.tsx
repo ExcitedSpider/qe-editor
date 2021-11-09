@@ -58,6 +58,7 @@ export const MpEditor = forwardRef<EditorInstance, MpEditorProps>(
               format="fontSize"
               options={getFontSizeOptions()}
               defaultValue="17px"
+              tips="字号"
             ></MarkSelect>
             <MarkButton tips="粗体" format="bold">B</MarkButton>
             <MarkButton tips="斜体" format="fontStyle" value="italic">

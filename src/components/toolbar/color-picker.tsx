@@ -77,7 +77,7 @@ export const ColorPicker: React.FC<{ tips: string }> = ({tips}) => {
   });
 
   return (
-    <Tooltip popup={tips}>
+    <Tooltip popup={tips} placement="top">
       <div
         ref={ref as any}
         onClick={setVisible?.bind(null, true)}
