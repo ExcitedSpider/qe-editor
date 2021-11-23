@@ -1,8 +1,6 @@
-# TAD MP Editor
+# QE Editor
 
-微信图文模版编辑器。
-
-Designed & Made by TAD。
+基于 slatejs 的富文本编辑器
 
 ## 开始
 
